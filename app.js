@@ -25,7 +25,7 @@ app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
 app.use('*', (req, res) => {
-  res.status(404).send({ message: 'Страницы не найдено.' })
+  res.status(404).send({ message: 'Страницы не найдено.' });
 });
 
 app.listen(PORT);
