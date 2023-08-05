@@ -1,6 +1,6 @@
-const Card = require('../models/card');
 const httpConstans = require('http2').constants;
 const { default: mongoose } = require('mongoose');
+const Card = require('../models/card');
 
 module.exports.getCards = (req, res) => {
   Card.find({})
