@@ -1,6 +1,6 @@
+const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const { login } = require('../controllers/users');
-const { celebrate, Joi } = require('celebrate');
 
 router.post('/', celebrate({
   body: Joi.object().keys({
@@ -9,4 +9,4 @@ router.post('/', celebrate({
   }),
 }), login);
 
-module.exports = router
+module.exports = router;

@@ -8,7 +8,7 @@ const NotFoundStatus = require('../errors/NotFoundStatus');
 
 router.use('/signup', signupRouter);
 router.use('/signin', signinRouter);
-router.use(auth)
+router.use(auth);
 router.use('/users', userRouter);
 router.use('/cards', cardsRouter);
 router.use('*', (req, res, next) => {

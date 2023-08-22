@@ -1,8 +1,8 @@
+const { celebrate, Joi } = require('celebrate');
 const router = require('express').Router();
 const {
   getCards, addCard, deleteCard, likeCard, dislikeCard,
 } = require('../controllers/cards');
-const { celebrate, Joi } = require('celebrate');
 const urlRegex = require('../utils/const');
 
 router.get('/', getCards);
