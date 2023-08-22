@@ -1,10 +1,10 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 const { default: mongoose } = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const BadRequestStatus = require('../errors/BadRequestStatus');
 const NotFoundStatus = require('../errors/NotFoundStatus');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const ConflictStatus = require('../errors/ConflictStatus');
 
 module.exports.getUsers = (req, res, next) => {
@@ -34,20 +34,23 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.getMeUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((users) => res.status(HTTP_STATUS_OK).send(users))
-    .catch(next)
-}
+    .catch(next);
+};
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   bcrypt.hash(password, 10)
-    .then((hash) => User.create({ name, about, avatar, email, password: hash })
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash,
+    })
       .then((user) => res.status(HTTP_STATUS_CREATED).send({
-        name: user.name, about: user.about, avatar: user.avatar, email: user.email, _id: user._id
+        name: user.name, about: user.about, avatar: user.avatar, email: user.email, _id: user._id,
       }))
       .catch((err) => {
-        console.log(err)
         if (err.code === 11000) {
-          next(new ConflictStatus('Пользователь с данным email уже зарегистрирован.'))
+          next(new ConflictStatus('Пользователь с данным email уже зарегистрирован.'));
         } else if (err instanceof mongoose.Error.ValidationError) {
           next(new BadRequestStatus(err.message));
         } else {
@@ -86,8 +89,8 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id, }, 'mesto', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, 'mesto', { expiresIn: '7d' });
       res.send({ token });
     })
     .catch(next);
-}
+};

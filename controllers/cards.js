@@ -26,7 +26,7 @@ module.exports.addCard = (req, res, next) => {
           } else {
             next(err);
           }
-        })
+        });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
@@ -34,14 +34,14 @@ module.exports.addCard = (req, res, next) => {
       } else {
         next(err);
       }
-    })
-}
+    });
+};
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {
-        throw new ForbiddenStatus('Карточка другого пользователя.')
+        throw new ForbiddenStatus('Карточка другого пользователя.');
       }
       Card.deleteOne(card)
         .orFail()
@@ -60,11 +60,11 @@ module.exports.deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'TypeError') {
-        next(new NotFoundStatus('Карточка с указанным _id не найдена.'))
+        next(new NotFoundStatus('Карточка с указанным _id не найдена.'));
       } else {
-        next(err)
+        next(err);
       }
-    })
+    });
 };
 
 module.exports.likeCard = (req, res, next) => {
